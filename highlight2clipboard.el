@@ -77,13 +77,11 @@
   "Support for exporting formatted text to the clipboard."
   :group 'faces)
 
-
 (defcustom highlight2clipboard-temporary-file-directory
   (or small-temporary-file-directory
       temporary-file-directory)
   "The location where this package place temporary files."
   :group 'highlight2clipboard)
-
 
 ;; Copy of the last copied text, used to prevent loss of text
 ;; properties when the text is pasted back into Emacs.
@@ -103,7 +101,6 @@
 (defvar highlight2clipboard--temp-file-base-name
   (expand-file-name (make-temp-name "h2c-")
                     highlight2clipboard-temporary-file-directory))
-
 
 ;; ------------------------------------------------------------
 ;; Interprogram functions
@@ -127,7 +124,6 @@
 (setq interprogram-paste-function
       'highlight2clipboard-interprogram-paste-function)
 
-
 ;; ------------------------------------------------------------
 ;; Global minor mode
 ;;
@@ -147,7 +143,6 @@
         (if highlight2clipboard-mode
             'highlight2clipboard-copy-to-clipboard
           highlight2clipboard--original-interprocess-cut-function)))
-
 
 ;; ------------------------------------------------------------
 ;; Core functions.
@@ -186,7 +181,6 @@ are fully fontified."
   (interactive)
   (highlight2clipboard-copy-region-to-clipboard (point-min) (point-max)))
 
-
 (defun highlight2clipboard-copy-to-clipboard (text)
   "Copy TEXT with formatting to the system clipboard."
   (setq highlight2clipboard--last-text text)
@@ -222,7 +216,6 @@ are fully fontified."
       (funcall highlight2clipboard--add-html-to-clipboard-function
                file-name-html))))
 
-
 ;; ------------------------------------------------------------
 ;; System-specific support.
 ;;
@@ -239,7 +232,6 @@ are fully fontified."
                  #'highlight2clipboard--add-html-to-clipboard-w32)
                 (t (error "Unsupported system: %s" system-type))))))
 
-
 (defun highlight2clipboard--add-html-to-clipboard-osx (file-name)
   (call-process
    "python"
@@ -249,7 +241,6 @@ are fully fontified."
    (concat highlight2clipboard--directory
            "bin/highlight2clipboard-osx.py")
    file-name))
-
 
 (defun highlight2clipboard--add-html-to-clipboard-w32 (file-name)
   (call-process
