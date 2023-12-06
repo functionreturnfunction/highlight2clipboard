@@ -1,0 +1,4 @@
+** TODO Special org-mode handling
+
+This should export the org syntax as html, rather than encoding the org markup with syntax highlighting as html.
+Maybe it could be an option or a setting to do either/or?
