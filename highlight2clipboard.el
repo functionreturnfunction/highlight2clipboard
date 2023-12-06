@@ -154,30 +154,28 @@
 ;;
 
 ;;;###autoload
-(defun highlight2clipboard-ensure-buffer-is-fontified ()
-  "Ensure that the buffer is fontified."
+(defun highlight2clipboard-ensure-region-is-fontified (beg end)
+  "Ensure that the region from BEG to END is fontified."
   (interactive)
-  (when (and font-lock-mode
-             ;; Prevent clearing out face attributes explicitly
-             ;; inserted by functions like `list-faces-display'.
-             ;; (Font-lock mode is enabled, for some reason, in those
-             ;; buffers.)
-             (not (and (eq major-mode 'help-mode)
-                       (not font-lock-defaults))))
-    (font-lock-fontify-region (point-min) (point-max))))
-
+  (when
+      (and font-lock-mode
+           ;; Prevent clearing out face attributes explicitly-inserted by
+           ;; functions like `list-faces-display'.
+           ;; (Font-lock mode is enabled, for some reason, in those
+           ;; buffers.)
+           (not (and (eq major-mode 'help-mode)
+                     (not font-lock-defaults))))
+    (font-lock-fontify-region beg end)))
 
 ;;;###autoload
 (defun highlight2clipboard-copy-region-to-clipboard (beg end)
-  "Copy region with formatting to system clipboard.
+  "Copy region from BEG to END with formatting to system clipboard.
 
 Unlike using Highlight2clipboard mode, this ensure that buffers
 are fully fontified."
   (interactive "r")
-  (highlight2clipboard-ensure-buffer-is-fontified)
-  (highlight2clipboard-copy-to-clipboard
-   (buffer-substring beg end)))
-
+  (highlight2clipboard-ensure-region-is-fontified beg end)
+  (highlight2clipboard-copy-to-clipboard (buffer-substring beg end)))
 
 ;;;###autoload
 (defun highlight2clipboard-copy-buffer-to-clipboard ()
