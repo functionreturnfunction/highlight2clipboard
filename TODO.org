@@ -2,3 +2,8 @@
 
 This should export the org syntax as html, rather than encoding the org markup with syntax highlighting as html.
 Maybe it could be an option or a setting to do either/or?
+
+** TODO Other operating systems
+
+The .net helper app probably won't work anywhere else since it's framework.  Maybe windows could use powershell,
+and I can find something else for linux and macOS?
