@@ -189,10 +189,10 @@ are fully fontified."
     (funcall highlight2clipboard--original-interprocess-cut-function text))
   (highlight2clipboard-set-defaults)
   ;; Add a html version to the clipboard.
-  (let ((file-name-html (concat highlight2clipboard--temp-file-base-name
-                                ".html")))
+  (let ((file-name-html (concat highlight2clipboard--temp-file-base-name ".html")))
     (with-temp-buffer
       (insert text)
+      (write-region (point-min) (point-max) highlight2clipboard--temp-file-base-name nil :silent)
       (let ((htmlize-output-type 'inline-css))
         (let ((html-buffer (htmlize-buffer)))
           (with-current-buffer html-buffer
@@ -214,6 +214,7 @@ are fully fontified."
           (kill-buffer html-buffer))))
     (when highlight2clipboard--add-html-to-clipboard-function
       (funcall highlight2clipboard--add-html-to-clipboard-function
+               highlight2clipboard--temp-file-base-name
                file-name-html))))
 
 ;; ------------------------------------------------------------
@@ -242,14 +243,13 @@ are fully fontified."
            "bin/highlight2clipboard-osx.py")
    file-name))
 
-(defun highlight2clipboard--add-html-to-clipboard-w32 (file-name)
+(defun highlight2clipboard--add-html-to-clipboard-w32 (file-name html-file-name)
   (call-process
-   "ruby"
+   "HTMLClip"
    nil
    0                                  ; <- Discard and don't wait
    nil
-   (concat highlight2clipboard--directory
-           "bin/highlight2clipboard-w32.rb")
+   html-file-name
    file-name))
 
 (provide 'highlight2clipboard)
