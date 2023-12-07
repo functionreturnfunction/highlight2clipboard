@@ -3,6 +3,11 @@
 The .net helper app probably won't work anywhere else since it's framework.  Maybe windows could use powershell,
 and I can find something else for linux and macOS?
 
+** TODO Capture background color
+
+Pasting text from modes other than org doesn't include the background color, so if the output is going to an
+application or text area with a light background my color scheme becomes an issue.
+
 ** DONE Org output has xml declaration at the top                       :bug:
 CLOSED: [2023-12-06 Wed 21:35]
 
