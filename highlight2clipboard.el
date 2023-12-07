@@ -181,6 +181,21 @@ are fully fontified."
   (interactive)
   (highlight2clipboard-copy-region-to-clipboard (point-min) (point-max)))
 
+(defvar highlight2clipboard-buffer-to-html-fn-alist
+  '((org-mode . (lambda ()
+                  (let ((org-html-doctype "html5"))
+                    (org-html-export-as-html nil nil nil)))))
+  "List of functions to use to convert different buffer major modes to html.")
+
+(defun highlight2clipboard-buffer-to-html (buffer-major-mode)
+  "Convert the current buffer to a stylized html representation of itself.
+Search `highlight2clipboard-buffer-to-html-fn-alist' for a key matching
+BUFFER-MAJOR-MODE; if found the value will be used as the function to convert
+the buffer to html, otherwise `htmlize-buffer' will be used."
+  (let ((fn (cdr (assoc buffer-major-mode highlight2clipboard-buffer-to-html-fn-alist))))
+    (if fn (funcall fn)
+      (htmlize-buffer))))
+
 (defun highlight2clipboard-copy-to-clipboard (text)
   "Copy TEXT with formatting to the system clipboard."
   (setq highlight2clipboard--last-text text)
@@ -189,12 +204,13 @@ are fully fontified."
     (funcall highlight2clipboard--original-interprocess-cut-function text))
   (highlight2clipboard-set-defaults)
   ;; Add a html version to the clipboard.
-  (let ((file-name-html (concat highlight2clipboard--temp-file-base-name ".html")))
+  (let ((file-name-html (concat highlight2clipboard--temp-file-base-name ".html"))
+        (buffer-major-mode major-mode))
     (with-temp-buffer
       (insert text)
       (write-region (point-min) (point-max) highlight2clipboard--temp-file-base-name nil :silent)
       (let ((htmlize-output-type 'inline-css))
-        (let ((html-buffer (htmlize-buffer)))
+        (let ((html-buffer (highlight2clipboard-buffer-to-html buffer-major-mode)))
           (with-current-buffer html-buffer
             (let ((coding-system-for-write 'utf-8))
               (goto-char (point-min))
